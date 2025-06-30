@@ -2,20 +2,12 @@
 const express = require('express');
 const cors = require('cors');
 const routes = require('./routes/index.js');
-
+const {testConnection} = require('./db/databaseManager.js')
 // Crea una instancia de la aplicación Express
 const app = express();
 
 //Realizar prueba de conexión a la base de datos
-const db = require('./db/mysql.js');
-db.getConnection()
-  .then(connection => {
-    console.log('Conexión a la base de datos exitosa');
-    connection.release(); // Libera la conexión después de la prueba
-  })
-  .catch(err => {
-    console.error('Error al conectar a la base de datos:', err);
-  });
+testConnection()
 
 // Habilita CORS para permitir solicitudes de otros orígenes
 app.use(cors());
