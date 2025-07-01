@@ -1,6 +1,7 @@
 const {
     obtenerGastos,
-    obtenerGastoPorUsuario
+    obtenerGastoPorUsuario,
+    insertarGasto
 } = require('./gastoHelper');
 
 const getGastos = async (req, res) => {
@@ -39,9 +40,13 @@ const getGastosPorUsuario = async (req, res) => {
 }
 
 const insertarGastoPorUsuario = async (req, res) => {
-    console.info(`API: api/gastos/usuario`);
+    console.info(`API: api/gastos/insertarGasto`);
     // Extrae idUsuario antes de usarlo
-    const { monto, idUsuario, idCategoria } = req.body;
+    let monto = req.body.monto ? req.body.monto : null;
+    let idUsuario = req.body.idUsuario ? req.body.idUsuario : null;
+    let idCategoria = req.body.idCategoria ? req.body.idCategoria : null;
+    let descripcion = req.body.descripcion ? req.body.descripcion : null;
+
 
     if(!monto && !idUsuario && idCategoria){
         res.status(400).json({
@@ -52,15 +57,11 @@ const insertarGastoPorUsuario = async (req, res) => {
 
     try {
         // Insertamos un gasto
-        const resultado = await insertarGasto(monto, idUsuario, idCategoria);
+        const resultado = await insertarGasto(monto, idUsuario, idCategoria, descripcion);
 
         res.status(201).json({
             mensaje: "Gasto insertado correctamente", 
-            datos : {
-                monto,
-                idUsuario,
-                idCategoria
-            }
+            datos : resultado
         });
     } catch (error) {
         res.status(500).json({
@@ -73,5 +74,6 @@ const insertarGastoPorUsuario = async (req, res) => {
 
 module.exports = {
     getGastos,
-    getGastosPorUsuario
+    getGastosPorUsuario,
+    insertarGastoPorUsuario
 }
