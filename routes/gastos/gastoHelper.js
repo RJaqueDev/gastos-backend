@@ -26,14 +26,29 @@ const obtenerGastoPorUsuario = async (idUsuario) =>{
         return rows;
     } catch (error) {
         console.error("Error al obtener los datos por usuario: ", error)
+        return error;
     }
 }
 
-const insertarGasto = (monto, usuario, categoria) => {
+const insertarGasto = async (monto, usuario, categoria) => {
+  try {
+    //Query para insertar un gasto
+    const query = `INSERT INTO gasto (monto, id_usuario, tiene_couta,id_categoria,cantidad_couta) 
+                 VALUES (${monto}, ${usuario}, 0,${categoria}, 0)`; 
 
+    //Hacemos la consulta a la base de datos
+    const [rows] = await pool.query(query);
+
+    //Devolvemos el resultado de la query
+    return rows;
+  } catch (error) {
+    console.error(`Error al insertar en la BD: ${error}`);
+    return error;
+  }
 }
 
 module.exports = {
   obtenerGastos,
-  obtenerGastoPorUsuario
+  obtenerGastoPorUsuario,
+  insertarGasto
 };

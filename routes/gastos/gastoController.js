@@ -43,12 +43,24 @@ const insertarGastoPorUsuario = async (req, res) => {
     // Extrae idUsuario antes de usarlo
     const { monto, idUsuario, idCategoria } = req.body;
 
+    if(!monto && !idUsuario && idCategoria){
+        res.status(400).json({
+            status: 400,
+            mensaje: "Debe enviar todos los datos para poder insertar un gasto"
+        })
+    }
+
     try {
-        // Aquí deberías implementar la lógica para insertar el gasto en la base de datos
-        // Por ejemplo:
-        // await insertarGasto(monto, idUsuario, idCategoria);
-        res.status(200).json({
-            mensaje: "Gasto insertado correctamente"
+        // Insertamos un gasto
+        const resultado = await insertarGasto(monto, idUsuario, idCategoria);
+
+        res.status(201).json({
+            mensaje: "Gasto insertado correctamente", 
+            datos : {
+                monto,
+                idUsuario,
+                idCategoria
+            }
         });
     } catch (error) {
         res.status(500).json({
