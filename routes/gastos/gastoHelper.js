@@ -33,17 +33,17 @@ const obtenerGastoPorUsuario = async (idUsuario) => {
 const insertarGasto = async (monto, usuario, categoria, descripcion) => {
   try {
     //Query para insertar un gasto usando parámetros para evitar errores de sintaxis y SQL injection
-    const query = `INSERT INTO gasto (monto, id_usuario, tiene_couta, id_categoria, cantidad_couta, descripcion) 
+    const query = `INSERT INTO gasto (monto, id_usuario, tiene_cuota, id_categoria, cantidad_cuota, descripcion) 
                  VALUES (?, ?, 0, ?, 0, ?)`;
     //Hacemos la consulta a la base de datos con parámetros
-    const [rows] = await pool.query(query, [
+    const [affectedRows, insertId] = await pool.query(query, [
       monto,
       usuario,
       categoria,
       descripcion,
     ]);
     //Devolvemos el resultado de la query
-    return rows;z
+    return {affectedRows};
   } catch (error) {
     console.error(`Error al insertar en la BD: ${error}`);
     return error;
